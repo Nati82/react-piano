@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import { Key as KeyLabel } from "../../domain/keyboard";
 
@@ -17,6 +17,7 @@ export function usePressObserver({
   onFinishPress,
 }: Settings): IsPressed {
   const [pressed, setPressed] = useState<IsPressed>(false);
+  // const  = useCallback(equal, [watchKey, code]);
 
   function fromEventCode(code: EventCode): KeyLabel {
     const prefixRegex = /Key|Digit/gi;
@@ -24,10 +25,13 @@ export function usePressObserver({
   }
 
   function equal(watchedKey: KeyLabel, eventCode: EventCode): boolean {
-    return fromEventCode(eventCode).toUpperCase() === watchedKey.toUpperCase();
+    return (
+      fromEventCode(eventCode).toUpperCase() === watchedKey.toUpperCase()
+    );
   }
 
   useEffect(() => {
+
     function handlePressStart({ code }: KeyboardEvent): void {
       if (pressed || !equal(watchKey, code)) return;
       setPressed(true);
